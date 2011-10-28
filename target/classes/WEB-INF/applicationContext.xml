@@ -23,7 +23,8 @@
         http://www.springframework.org/schema/util/spring-util-3.0.xsd
         http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring 
         http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.1.xsd">
-	
+	<mvc:annotation-driven />
+	<context:component-scan base-package="com.weina.test.tianji.api" />
 	<util:properties id="globalProperties" location="/WEB-INF/configuration.properties" />
 
 </beans>
