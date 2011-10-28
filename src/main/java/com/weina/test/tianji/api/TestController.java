@@ -26,7 +26,7 @@ public class TestController {
 	    private static final String oauthBase = "https://login.tianji.com/authz/oauth";  
 	    private static final String authorizeURL = oauthBase + "/authorize";  
 	    private static final String accessTokenURL = oauthBase + "/token";  
-	    private static final String apiBase = "https://api.tianji.com";  
+	      private static final String apiBase = "https://api.tianji.com";  
 	@RequestMapping(method= RequestMethod.GET)
 	public String get(@RequestParam(required=false) String code,HttpServletRequest request, HttpServletResponse response){
 	        String redirectUri = request.getRequestURL().toString();  
