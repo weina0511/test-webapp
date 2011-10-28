@@ -12,10 +12,16 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
+
+import com.weina.test.tianji.api.model.User;
+import com.weina.test.tianji.api.model.util.ModelUtils;
 
 @Controller
 @RequestMapping("test")
@@ -28,7 +34,7 @@ public class TestController {
 	    private static final String accessTokenURL = oauthBase + "/token";  
 	    private static final String apiBase = "https://api.tianji.com";  
 	@RequestMapping(method= RequestMethod.GET)
-	public String get(@RequestParam(required=false) String code,HttpServletRequest request, HttpServletResponse response){
+	public String get(@RequestParam(required=false) String code,HttpServletRequest request, HttpServletResponse response,Model model){
 	        String redirectUri = request.getRequestURL().toString();  
 	  
 	        if (code == null || "".equals(code)) {  
@@ -44,65 +50,32 @@ public class TestController {
 	                    + "&client_secret=" + clientSecret  
 	                    + "&redirect_uri=" + redirectUri + "&code=" + code;  
 	  
-	            String resp = executePost(accessTokenURL, urlParameters);  
+	            String resp = ModelUtils.executePost(accessTokenURL, urlParameters);  
 	  
 	            String accessToken = "";  
 	            try {  
 	                JSONObject json = new JSONObject(resp);  
 	                accessToken = json.getString("access_token");  
+	                System.out.println("accessToken==="+accessToken);
 	            } catch (JSONException e) { }  
 	  
 	            // Step 3 - Create connection 
-	            return "redirect:"+apiBase + "/me.xml?access_token=" + accessToken;
+	            RestTemplate rt = new RestTemplate();
+	           ResponseEntity<String> ss =  rt.getForEntity(apiBase+"/me?access_token="+accessToken, String.class);
+	           User user = ModelUtils.getUserByString(ss.getBody());
+	           
+	          //  return "redirect:"+apiBase + "/me.xml?access_token=" + accessToken;
 	           // response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);  
 	            //response.setHeader("Location", apiBase + "/me.xml?access_token=" + accessToken);  
+	           model.addAttribute("user", user);
+	           return "test";
 	        }  
-		//return "test";
 	}
-	
-	 // POST request helper  
-    private String executePost(String targetURL, String urlParameters) {  
-        URL url;  
-        HttpURLConnection connection = null;  
-        try {  
-            // Create connection  
-            url = new URL(targetURL);  
-            connection = (HttpURLConnection) url.openConnection();  
-            connection.setRequestMethod("POST");  
-            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");  
-            connection.setRequestProperty("Content-Length",  
-                        "" + Integer.toString(urlParameters.getBytes().length));  
-            connection.setRequestProperty("Content-Language", "en-US");  
-  
-            connection.setUseCaches(false);  
-            connection.setDoInput(true);  
-            connection.setDoOutput(true);  
-  
-            // Send request  
-            DataOutputStream wr = new DataOutputStream(connection.getOutputStream());  
-            wr.writeBytes(urlParameters);  
-            wr.flush();  
-            wr.close();  
-  
-            // Get Response  
-            InputStream is = connection.getInputStream();  
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is));  
-            String line;  
-            StringBuffer response = new StringBuffer();  
-            while ((line = rd.readLine()) != null) {  
-                response.append(line);  
-                response.append('\r');  
-            }  
-            rd.close();  
-            return response.toString();  
-  
-        } catch (Exception e) {  
-            e.printStackTrace();  
-            return null;  
-        } finally {  
-            if (connection != null) {  
-                connection.disconnect();  
-            }  
-        }  
-    }  
+	public static void main(String[] args) {
+//		RestTemplate rt = new RestTemplate();
+//        String accessToken = "23bd3d22-3659-4ea2-a6b8-eeca1a3eb204";
+//        ResponseEntity<String> ss =  rt.getForEntity(apiBase+"/4823001/inbox?access_token="+accessToken, String.class);
+//        System.out.println(ss.getBody());
+	}
+	 
 }
