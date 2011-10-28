@@ -1,0 +1,15 @@
+*{
+	margin:0;
+	padding:0;
+}
+
+body{
+	background:#ddd;
+}div{
+	margin:0;
+	padding:0;
+}
+
+body p{
+	background:red;
+}
