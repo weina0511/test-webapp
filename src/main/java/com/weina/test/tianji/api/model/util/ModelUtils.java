@@ -6,6 +6,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,66 +20,143 @@ import org.json.JSONObject;
 import com.weina.test.tianji.api.model.User;
 
 public class ModelUtils {
-	// POST request helper  
-    public static String executePost(String targetURL, String urlParameters) {  
-        URL url;  
-        HttpURLConnection connection = null;  
-        try {  
-            // Create connection  
-            url = new URL(targetURL);  
-            connection = (HttpURLConnection) url.openConnection();  
-            connection.setRequestMethod("POST");  
-            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");  
-            connection.setRequestProperty("Content-Length",  
-                        "" + Integer.toString(urlParameters.getBytes().length));  
-            connection.setRequestProperty("Content-Language", "en-US");  
-  
-            connection.setUseCaches(false);  
-            connection.setDoInput(true);  
-            connection.setDoOutput(true);  
-  
-            // Send request  
-            DataOutputStream wr = new DataOutputStream(connection.getOutputStream());  
-            wr.writeBytes(urlParameters);  
-            wr.flush();  
-            wr.close();  
-  
-            // Get Response  
-            InputStream is = connection.getInputStream();  
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is));  
-            String line;  
-            StringBuffer response = new StringBuffer();  
-            while ((line = rd.readLine()) != null) {  
-                response.append(line);  
-                response.append('\r');  
-            }  
-            rd.close();  
-            return response.toString();  
-  
-        } catch (Exception e) {  
-            e.printStackTrace();  
-            return null;  
-        } finally {  
-            if (connection != null) {  
-                connection.disconnect();  
-            }  
-        }  
-    }  
-	public static User getUserByString(String s){
+	// POST request helper
+	public static String executePost(String targetURL, String urlParameters) {
+		URL url;
+		HttpURLConnection connection = null;
+		try {
+			// Create connection
+			url = new URL(targetURL);
+			connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestMethod("POST");
+			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			connection.setRequestProperty("Content-Length", "" + Integer.toString(urlParameters.getBytes().length));
+			connection.setRequestProperty("Content-Language", "en-US");
+
+			connection.setUseCaches(false);
+			connection.setDoInput(true);
+			connection.setDoOutput(true);
+
+			// Send request
+			DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+			wr.writeBytes(urlParameters);
+			wr.flush();
+			wr.close();
+
+			// Get Response
+			InputStream is = connection.getInputStream();
+			BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+			String line;
+			StringBuffer response = new StringBuffer();
+			while ((line = rd.readLine()) != null) {
+				response.append(line);
+				response.append('\r');
+			}
+			rd.close();
+			return response.toString();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (connection != null) {
+				connection.disconnect();
+			}
+		}
+	}
+
+	public static User getUserByString(String s) {
 		User user = new User();
-		   try {
+		try {
 			JSONObject jsonuser = new JSONObject(s);
 			user.setId(jsonuser.getString("id"));
-//			user.setCity(jsonuser.getString("location"));
-			user.setContact_count(jsonuser.getInt("contact_count"));
-			user.setLink(jsonuser.getString("link"));
-			user.setName(jsonuser.getString("name"));
-			user.setPicture_small(jsonuser.getString("picture_small"));
-			user.setPicture_large(jsonuser.getString("picture_large"));
+			// user.setCity(jsonuser.getString("location"));
+			user.setContact_count(Integer.parseInt(getStrByKey("contact_count", s, Integer.class)));
+			user.setLink(getStrByKey("link", s));
+			user.setName(getStrByKey("name", s));
+			user.setPicture_small(getStrByKey("picture_small", s));
+			// user.setPicture_large(jsonuser.getString("picture_large"));
+			// user.setHeadline(jsonuser.getString("headline"));
+			System.out.println(user);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
-		   return user;
+		}
+		return user;
+	}
+
+	public static User getUserCardByString(String s) {
+		User user = new User();
+		user.setEmail(getStrByKey("emails", s));
+		String mobile = getStrByKey("mobile", s);
+		String phone = getStrByKey("number", s);
+		if (mobile != null) {
+			user.setMobile(mobile);
+		}
+		if (phone != null) {
+			user.setPhone(phone);
+		}
+		System.out.println(user);
+		// user.setPhone(jsonuser.getJSONArray("phones").getString(0))
+		return user;
+	}
+	private static String getStrByKey(String key, String str) {
+		return getStrByKey(key, str, String.class);
+	}
+	private static String getStrByKey(String key, String str, Class type) {
+		Pattern p = getPatternByKey(key, type);
+		Matcher m = p.matcher(str);
+		if (m.find()) {
+			//System.out.println(m.groupCount() + "matched---:" + m.group(1) + "===key==" + m.group(2) +"----" + m.group());
+			return m.group(2);
+		}
+		return null;
+	}
+
+	private static Map<String, Object> getStrByKey(String str, Map<String, Class> keys) {
+		Map<String, Object> values = new HashMap<String, Object>();
+		// keys.get("1").getClass().equals(Integer.class);
+		StringBuilder sb = new StringBuilder();
+		List<Pattern> ps = new ArrayList<Pattern>(values.size());
+		for (Entry<String, Class> entry : keys.entrySet()) {
+			ps.add(getPatternByKey(entry.getKey(), entry.getValue()));
+		}
+		// Pattern pkey = Pattern.compile("\"" + key + "\":[^\"]*\"([^\"]+)");
+		for (Pattern p : ps) {
+			Matcher m = p.matcher(str);
+			while (m.find()) {
+				System.out.println("matched---:" + m.group(1) + "===key222==" + m.group(2) + "============" + m.group());
+				values.put(m.group(1), m.group(2));
+			}
+		}
+		// Pattern.c
+		
+		return values;
+	}
+
+	private static Pattern getPatternByKey(String key, Class clazz) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("\"(" + key + ")\":");
+		sb.append("[^\"]*?");
+		if (clazz.equals(String.class)) {
+			sb.append("\"([^\"]+)");
+		} else if (clazz.equals(Integer.class)) {
+			sb.append("(\\d+)");
+		}
+		//System.out.println("" + sb);
+		return Pattern.compile(sb.toString());
+	}
+
+	// {"id":"","type":"CONTACT CARDS","name":"","link":"","updated_time":"2011-10-28T21:57:54+08:00","data":[{"id":"","type":"CONTACT CARD","name":"","link":"","updated_time":"2011-10-28T21:57:54+08:00","kind":"BUSINESS","shared":"EVERYONE","company_address":"北京市朝阳区万达广场１０号楼","city":"北京","country":"中国大陆","region":"北京","emails":["juanjuansui@126.com"],"phones":[{"type":"LANDLINE","number":"010-59798008"}],"ims":[{"type":"MSN","value":"syyywhhlz@hotmail.com"}]}]}
+	public static void main(String[] args) {
+		String str = "afas:\"sdfsdf\", \"emails\":[\"leoner@163.com\"],\"number\":\"010-59798008\", \"count\": 123456,\"name\":22";
+		Map<String, Class> keys = new HashMap<String, Class>();
+		keys.put("emails", String.class);
+		keys.put("number", String.class);
+		keys.put("count", Integer.class);
+		//System.out.println(getStrByKey(str, keys));
+		System.out.println(getStrByKey("emails", str, String.class));
+		System.out.println(getStrByKey("number", str, String.class));
+		System.out.println(getStrByKey("count", str, Integer.class));
 	}
 }

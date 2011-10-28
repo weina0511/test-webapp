@@ -8,6 +8,34 @@ public class User {
 	private String picture_small;
 	private String picture_large;
 	private String city;
+	private String headline;
+	private String email;
+	private String phone;
+	private String mobile;
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public String getMobile() {
+		return mobile;
+	}
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+	public String getHeadline() {
+		return headline;
+	}
+	public void setHeadline(String headline) {
+		this.headline = headline;
+	}
 	public String getId() {
 		return id;
 	}
@@ -49,6 +77,11 @@ public class User {
 	}
 	public void setCity(String city) {
 		this.city = city;
+	}
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", name=" + name + ", link=" + link + ", contact_count=" + contact_count + ", picture_small=" + picture_small + ", picture_large=" + picture_large + ", city=" + city
+				+ ", headline=" + headline + ", email=" + email + ", phone=" + phone + ", mobile=" + mobile + "]";
 	}
 	
 }

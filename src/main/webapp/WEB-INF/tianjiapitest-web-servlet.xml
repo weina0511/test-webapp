@@ -31,5 +31,7 @@
 
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver" p:prefix="" p:suffix=".ftl" p:cache="false" p:exposeSpringMacroHelpers="true"
 		p:requestContextAttribute="rc" p:contentType="text/html;charset=UTF-8" />
+		
+	
 
 </beans>
