@@ -29,11 +29,11 @@
 		<div id="bd">
 			<div id="status">
 			<ul>
-				<#list feedlist as feed>
+				<#list feedlist.data as item>
 				<li>
-					<p class="username" link="${feed.senderLink}">${feed.senderName}</p>
-					<p class="message">${feed.message}</p>
-					<p class="date">${feed.updated_time}</p>
+					<p class="username" link="${item.link}">--${item.name}</p>
+					<p class="message">${item.label} ${item.message}</p>
+					<p class="date">${item.updated_time?string("yyyy-MM-dd")}</p>
 				</li>
 				</#list>
 			</ul>
