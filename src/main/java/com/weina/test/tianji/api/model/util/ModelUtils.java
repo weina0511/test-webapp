@@ -97,12 +97,12 @@ public class ModelUtils {
 			for(int i=0;i<dataArray.length();i++){
 				String oo = dataArray.getJSONObject(i).toString();
 				Card model = new Card();
-				model.setUserName(jsonfeed.getString("name"));
-				model.setSenderName(getStrByKey("name",oo));
-				model.setSenderLink(getStrByKey("link",oo));
-				model.setUpdated_time(getStrByKey("updated_time",oo));
-				String message = model.getSenderName()+getStrByKey("label",oo)+getStrByKey("message",oo);
-				model.setMessage(message);
+//				model.setUserName(jsonfeed.getString("name"));
+//				model.setSenderName(getStrByKey("name",oo));
+//				model.setSenderLink(getStrByKey("link",oo));
+//				model.setUpdated_time(getStrByKey("updated_time",oo));
+//				String message = model.getSenderName()+getStrByKey("label",oo)+getStrByKey("message",oo);
+//				model.setMessage(message);
 				list.add(model);			
 			}
 		} catch (JSONException e) {

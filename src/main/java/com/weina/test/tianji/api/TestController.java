@@ -63,11 +63,14 @@ public class TestController {
 	        }  
 	}
 	@RequestMapping(method = RequestMethod.POST,value="status")
-	public String postStatus(String message){
+	public String postStatus(String message,Model model){
 		 Message o = new Message();
 	     o.setMessage(message);
-	    ResponseEntity<String> ss =  restTemplate.postForEntity(apiBase+"/status?access_token="+accessToken, o,String.class);
-	    return "redirect:status";
+	    ResponseEntity<String> sussess =  restTemplate.postForEntity(apiBase+"/status?access_token="+accessToken, o,String.class);
+	    ResponseEntity<Feed> ss =  restTemplate.getForEntity(apiBase+"/me/home_newsfeed?user_detail=full&access_token="+accessToken, Feed.class);
+//        List<FeedModel> feedlist = ModelUtils.getListFeedByString(ss.getBody());
+        model.addAttribute("feedlist", ss.getBody());	
+	    return "test";
 	}
 	@RequestMapping(value="card",method=RequestMethod.GET)
 	public String getProfleCard(Model model,@RequestParam String id){

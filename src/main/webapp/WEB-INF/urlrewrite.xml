@@ -19,8 +19,15 @@
 	</rule>
 
 	<rule>
+		<from>/app/**</from>
+		<to>/$1</to>
+	</rule>
+	
+	<rule>
 		<from>/**</from>
 		<to>/app/$1</to>
 	</rule>
+	
+	
 
 </urlrewrite>
