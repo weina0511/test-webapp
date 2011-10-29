@@ -32,6 +32,7 @@
 			<ul data-role="listview" data-inset="true" id="statusList">
 				<#list feedlist.data as item>
 				<li>
+				phone:${item.from}
 					<p class="username" link="${item.link}">--${item.name}</p>
 					<p class="message">${item.label} ${item.message}</p>
 					<p class="date">${item.updated_time?string("yyyy-MM-dd")}</p>

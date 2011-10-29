@@ -53,7 +53,7 @@ public class TestController {
 	        	}
 	            // Step 3 - Create connection 
 	          // ResponseEntity<String> ss =  restTemplate.getForEntity(apiBase+"/me?access_token="+accessToken, String.class);
-	           ResponseEntity<Feed> ss =  restTemplate.getForEntity(apiBase+"/me/home_newsfeed?access_token="+accessToken, Feed.class);
+	           ResponseEntity<Feed> ss =  restTemplate.getForEntity(apiBase+"/me/home_newsfeed?user_detail=full&access_token="+accessToken, Feed.class);
 //	           List<FeedModel> feedlist = ModelUtils.getListFeedByString(ss.getBody());
 	           model.addAttribute("feedlist", ss.getBody());	            
 	           return "test";
@@ -102,7 +102,7 @@ public class TestController {
 //		rt.getMessageConverters().add(mc);
         String accessToken = "5cd49226-9152-431f-886c-567d9f8666e1";
 //        ResponseEntity<String> ss =  rt.getForEntity(apiBase+"/me/contact_cards?access_token="+accessToken, String.class);
-        ResponseEntity<Users> ss =  rt.getForEntity(apiBase+"/me/contacts?user_detail=full&access_token="+accessToken, Users.class);
+        ResponseEntity<Feed> ss =  rt.getForEntity(apiBase+"/me/home_newsfeed?user_detail=full&access_token="+accessToken, Feed.class);
         Message o = new Message();
         o.setMessage("hello,everyone!");
       // ResponseEntity<String> ss =  rt.postForEntity(apiBase+"/status?access_token="+accessToken,o ,String.class);

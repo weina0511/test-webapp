@@ -33,6 +33,14 @@ public class Feed {
 		private String link;
 		private String label;
 		private String message;
+		private From from;
+		
+		public From getFrom() {
+			return from;
+		}
+		public void setFrom(From from) {
+			this.from = from;
+		}
 		public String getName() {
 			return name;
 		}
@@ -64,12 +72,28 @@ public class Feed {
 		public void setMessage(String message) {
 			this.message = message;
 		}
+		
 		@Override
 		public String toString() {
-			return "SenderClass [name=" + name + ", updated_time=" + updated_time + ", link=" + link + ", labal=" + label + ", message=" + message + "]";
+			return "SenderClass [name=" + name + ", updated_time=" + updated_time + ", link=" + link + ", label=" + label + ", message=" + message + ", from=" + from + "]";
+		}				
+	}
+	@JsonIgnoreProperties(ignoreUnknown=true)
+	public static class From{
+		private String picture_small;
+
+		public String getPicture_small() {
+			return picture_small;
 		}
-		
-		
+
+		public void setPicture_small(String picture_small) {
+			this.picture_small = picture_small;
+		}
+
+		@Override
+		public String toString() {
+			return "From [picture_small=" + picture_small + "]";
+		}
 		
 	}
 	
