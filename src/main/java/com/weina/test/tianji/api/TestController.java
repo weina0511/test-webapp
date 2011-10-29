@@ -61,16 +61,11 @@ public class TestController {
 	        }  
 	}
 	@RequestMapping(method = RequestMethod.POST,value="status")
-	public @ResponseBody String postStatus(String message){
+	public String postStatus(String message){
 		 Message o = new Message();
 	     o.setMessage(message);
-	     try {
-	    	 ResponseEntity<String> ss =  restTemplate.postForEntity(apiBase+"/status?access_token="+accessToken, o,String.class);
-	    	 return "success";
-		} catch (Exception e) {
-			// TODO: handle exception
-			return "false";
-		}
+	    ResponseEntity<String> ss =  restTemplate.postForEntity(apiBase+"/status?access_token="+accessToken, o,String.class);
+	    return "redirect:status";
 	}
 	@RequestMapping(value="card",method=RequestMethod.GET)
 	public String getProfleCard(Model model,@RequestParam String id){
