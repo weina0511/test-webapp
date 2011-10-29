@@ -116,5 +116,15 @@
 		        break;
 		} }
 		</script>
+		<#list feedlist as feed>
+		---------
+		userName：${feed.userName};
+		senderName：${feed.senderName};
+		message:${feed.message};
+		senderLink:${feed.senderLink};
+		update_time:${feed.updated_time};
+		
+		</#list>
+		
 	</body>
 </html>

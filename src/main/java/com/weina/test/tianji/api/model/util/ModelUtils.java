@@ -14,9 +14,13 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
+import com.weina.test.tianji.api.model.FeedModel;
 import com.weina.test.tianji.api.model.User;
 
 public class ModelUtils {
@@ -84,7 +88,30 @@ public class ModelUtils {
 		}
 		return user;
 	}
-
+	public static List<FeedModel> getListFeedByString(String s){
+		List<FeedModel> list = new ArrayList<FeedModel>();
+		JSONObject jsonfeed;
+		try {
+			jsonfeed = new JSONObject(s);
+			JSONArray dataArray = jsonfeed.getJSONArray("data");
+			for(int i=0;i<dataArray.length();i++){
+				String oo = dataArray.getJSONObject(i).toString();
+				FeedModel model = new FeedModel();
+				model.setUserName(jsonfeed.getString("name"));
+				model.setSenderName(getStrByKey("name",oo));
+				model.setSenderLink(getStrByKey("link",oo));
+				model.setUpdated_time(getStrByKey("updated_time",oo));
+				String message = model.getSenderName()+getStrByKey("label",oo)+getStrByKey("message",oo);
+				model.setMessage(message);
+				list.add(model);			
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+		
+	}
 	public static User getUserCardByString(String s) {
 		User user = new User();
 		user.setEmail(getStrByKey("emails", s));
@@ -149,14 +176,24 @@ public class ModelUtils {
 
 	// {"id":"","type":"CONTACT CARDS","name":"","link":"","updated_time":"2011-10-28T21:57:54+08:00","data":[{"id":"","type":"CONTACT CARD","name":"","link":"","updated_time":"2011-10-28T21:57:54+08:00","kind":"BUSINESS","shared":"EVERYONE","company_address":"北京市朝阳区万达广场１０号楼","city":"北京","country":"中国大陆","region":"北京","emails":["juanjuansui@126.com"],"phones":[{"type":"LANDLINE","number":"010-59798008"}],"ims":[{"type":"MSN","value":"syyywhhlz@hotmail.com"}]}]}
 	public static void main(String[] args) {
-		String str = "afas:\"sdfsdf\", \"emails\":[\"leoner@163.com\"],\"number\":\"010-59798008\", \"count\": 123456,\"name\":22";
+		String apiBase = "https://api.tianji.com";  
+		String str = "afas:\"sdfsdf\", \"emails\":[\"leoner@163.com\"],\"number\":\"010-59798008\", \"number\":\"010-59798\",\"count\": 123456,\"name\":22";
+		RestTemplate rt = new RestTemplate();
+        String accessToken = "23bd3d22-3659-4ea2-a6b8-eeca1a3eb204";
+//        ResponseEntity<String> ss =  rt.getForEntity(apiBase+"/me/contact_cards?access_token="+accessToken, String.class);
+        ResponseEntity<String> ss =  rt.getForEntity(apiBase+"/me/home_newsfeed?access_token="+accessToken, String.class);
+      //  ResponseEntity<String> ss =  rt.postForEntity(apiBase+"/status?access_token="+accessToken,"ss" ,String.class);
+        System.out.println(ss.getBody());
 		Map<String, Class> keys = new HashMap<String, Class>();
-		keys.put("emails", String.class);
-		keys.put("number", String.class);
-		keys.put("count", Integer.class);
+//		keys.put("emails", String.class);
+//		keys.put("number", String.class);
+//		keys.put("count", Integer.class);
 		//System.out.println(getStrByKey(str, keys));
-		System.out.println(getStrByKey("emails", str, String.class));
-		System.out.println(getStrByKey("number", str, String.class));
-		System.out.println(getStrByKey("count", str, Integer.class));
+		List<FeedModel> feedlist = getListFeedByString(ss.getBody());
+		System.out.println("1111="+feedlist.get(0).toString());
+//		System.out.println(getStrByKey("emails", str, String.class));
+//		System.out.println(getStrByKey("number", str, String.class));
+//		System.out.println(getStrByKey("count", str, Integer.class));
 	}
+	
 }

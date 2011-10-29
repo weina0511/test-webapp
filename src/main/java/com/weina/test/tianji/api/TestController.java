@@ -1,5 +1,7 @@
 package com.weina.test.tianji.api;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,8 +15,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
+import com.weina.test.tianji.api.model.FeedModel;
 import com.weina.test.tianji.api.model.User;
 import com.weina.test.tianji.api.model.util.ModelUtils;
 
@@ -48,14 +52,21 @@ public class TestController {
 	            // Step 2 - Exchange for access grant  		           
 	        	}
 	            // Step 3 - Create connection 
-	           ResponseEntity<String> ss =  restTemplate.getForEntity(apiBase+"/me?access_token="+accessToken, String.class);
-	           User user = ModelUtils.getUserByString(ss.getBody());
+	          // ResponseEntity<String> ss =  restTemplate.getForEntity(apiBase+"/me?access_token="+accessToken, String.class);
+	           ResponseEntity<String> ss =  restTemplate.getForEntity(apiBase+"/me/home_newsfeed?access_token="+accessToken, String.class);
+	           List<FeedModel> feedlist = ModelUtils.getListFeedByString(ss.getBody());
 	          //  return "redirect:"+apiBase + "/me.xml?access_token=" + accessToken;
 	           // response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);  
 	            //response.setHeader("Location", apiBase + "/me.xml?access_token=" + accessToken);  
-	           model.addAttribute("user", user);	            
+	           model.addAttribute("feedlist", feedlist);	            
 	           return "test";
 	        }  
+	}
+	@RequestMapping(method = RequestMethod.POST)
+	public @ResponseBody String postStatus(String message){
+		 ResponseEntity<String> ss =  restTemplate.postForEntity(apiBase+"/status?access_token="+accessToken, message,String.class);
+		 System.out.println(ss.getBody());
+		return "suceess";
 	}
 	@RequestMapping(value="card",method=RequestMethod.GET)
 	public String getProfleCard(Model model){
@@ -79,7 +90,9 @@ public class TestController {
 	public static void main(String[] args) {
 		RestTemplate rt = new RestTemplate();
         String accessToken = "23bd3d22-3659-4ea2-a6b8-eeca1a3eb204";
-        ResponseEntity<String> ss =  rt.getForEntity(apiBase+"/me/contact_cards?access_token="+accessToken, String.class);
+//        ResponseEntity<String> ss =  rt.getForEntity(apiBase+"/me/contact_cards?access_token="+accessToken, String.class);
+        ResponseEntity<String> ss =  rt.getForEntity(apiBase+"/me/home_newsfeed?access_token="+accessToken, String.class);
+      //  ResponseEntity<String> ss =  rt.postForEntity(apiBase+"/status?access_token="+accessToken,"ss" ,String.class);
         System.out.println(ss.getBody());
 	}
 	 
