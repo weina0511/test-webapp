@@ -7,10 +7,7 @@
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0rc2/jquery.mobile-1.0rc2.min.css" />
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
 	<script type="text/javascript" src="http://code.jquery.com/mobile/1.0rc2/jquery.mobile-1.0rc2.min.js"></script>				
-	<!-- 
-	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-	
- -->
+	<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
 </head>
 <body>
 	<!-- 
@@ -20,12 +17,12 @@
 		<div data-role="head">
 			<div data-role="navbar">
 				<ul>
-					<li><a data-transition="slide" data-rel="status" href="#status" class="ui-btn-active">Status</a></li>
-					<li><a data-transition="slide" data-rel="contacts" href="#contacts">contacts</a></li>
+					<li><a data-transition="slide" data-rel="status" href="#status" class="ui-btn-active">近况</a></li>
+					<li><a data-transition="slide" data-rel="contacts" href="#contacts">附近的好友</a></li>
 				</ul>
 			</div>
 		</div>
-		<div data-role="content" class="margin">
+		<div data-role="content" class="ui-content">
 			<ul data-role="listview" data-inset="true" id="statusList">
 				<#list feedlist.data as item>
 				<li>
@@ -37,10 +34,10 @@
 				</li>
 				</#list>
 			</ul>
-			<form action="/app/status" method="POST">
-				<h2>Post a status</h2>
+			<form action="/status" method="POST">
+				<h2>发布近况</h2>
 				<textarea id="message" name="message"></textarea>
-				<p><input type="submit" value="POST" class="submit" data-role="button" data-inline="true"></p>
+				<p><input type="submit" value="发布" class="submit" data-role="button" data-inline="true"></p>
 			</form>
 		</div>
 	</div>
@@ -48,229 +45,93 @@
 		<div data-role="head">
 			<div data-role="navbar">
 				<ul>
-					<li><a data-transition="slide" data-rel="status" href="#status" data-direction="reverse">Status</a></li>
-					<li><a data-transition="slide" data-rel="contacts" href="#contacts" class="ui-btn-active">contacts</a></li>
+					<li><a data-transition="slide" data-rel="status" href="#status" data-direction="reverse">近况</a></li>
+					<li><a data-transition="slide" data-rel="contacts" href="#contacts" class="ui-btn-active">附近的好友</a></li>
 				</ul>
 			</div>
 		</div>
-		<div data-role="content" class="margin">
-			<#include 'contacts.ftl'/>
-			<p>a contact</p>
-			<a href="#dialog" data-rel="dialog" data-transition="pop">Open dialog</a>
+		<div data-role="content" class="ui-content">
+			<ul data-role="listview" data-inset="true" id="contactsList">
+				<li data-id="{3}" data-url="${4}">
+					<a href="#dialog" data-transition="pop" data-rel="dialog"><img src="{0}" alt="{1}" class="img"/>
+					<h3 class="username" >{1}</h3>
+					<p class="headline">{2}</p>
+					</a>
+				</li>
+			</ul>
 		</div>
 	</div>
 	<div data-role="page" id="dialog">
-
+		<div data-role="content">
+		<ul data-role="listview" data-inset="true" data-theme="c"><li>
+			<img src="{1}" alt="{2}" class="img"/>
+			<h3><a href="{0}">{2}</a></h3>
+			<p class="email"><a href="mailto:{3}">{3}</a></p>
+			<p class="phone"><a href="tel:{4}">{4}</a></p>
+		</li></ul>
+		<p><a href="#contacts" data-role="button" data-inline="true">返回</a></p>
+		</div>
 	</div>
-
 	<script type="text/javascript">
-	var getLocation=function(position){
-		console.log(position.coords)
-		//			var url=['http://maps.google.com/maps?q=',position.coords.latitude,',',position.coords.longitude].join('');
-		$.ajax({
-			url:'http://maps.googleapis.com/maps/api/geocode/json',
-			type:'GET',
-			data:{
-				latlng:[position.coords.latitude,position.coords.longitude].join(','),
-				sensor:true
-			},
-			dataType:'jsonp',
-			success: function(data){
-				//				console.log(data[data.length-2].formatted_address)
-			}
-		})
+	var MessageFormat = function(str){
+	    var args = [].slice.call(arguments,1);
+	    return str.replace(/\{([^}])\}/g,function(index,value){
+	        return args[value];
+	    })
 	};
-	function handleLocationError(error) {
-		switch (error.code) {
-		case 0:
-			updateStatus("There was an error while retrieving your location: " +error.message);
-			break;
-		case 1:
-			updateStatus("The user prevented this page from retrieving a location.");
-			break;
-		case 2:
-			updateStatus("The browser was unable to determine your location: " +error.message);
-			break;
-		case 3:
-			updateStatus("The browser timed out before retrieving the location.");
-			break;
-		}
-	}
-//	navigator.geolocation.getCurrentPosition(getLocation);
-	$(function(){
-		$.ajax({
-			url:'/contacts',
-			data:{
-				location:'北京'
-			},
-			success: function(data){
-				$('#contacts div[data-role=content]').html(data);
-			}
+	var showCard=function(){
+		var that=this;
+		$('#contacts').delegate('.ui-content a','click',function(){
+			var self=this;
+			$.ajax({
+				url:'/card?id='+$(this).closest('li').attr('data-id'),
+				dataType:'json',
+				success: function(data){
+					if (!that.template) {
+						that.template=$('#dialog').html();
+					}
+					
+					data=$.extend(data,{
+						name:$(self).closest('li').find('.username').html(),
+						picture:$(self).closest('li').find('.img').attr('src'),
+						link:$(self).closest('li').attr('data-url')
+					})
+					$('#dialog').html(MessageFormat(decodeURI(that.template),data.link,data.picture,data.name,data.email[0],data.phone[0]))
+				}
+			})
 		})
-	})
-	
-	
-	
-	
-	
-	
-	
-	
-	var categoryData = {
-		animals: {
-			name: "Animals",
-			description: "All your favorites from aardvarks to zebras.",
-			items: [
-				{
-					name: "Pets",
-				},
-				{
-					name: "Farm Animals",
-				},
-				{
-					name: "Wild Animals",
-				}
-			]
-		},
-		colors: {
-			name: "Colors",
-			description: "Fresh colors from the magic rainbow.",
-			items: [
-				{
-					name: "Blue",
-				},
-				{
-					name: "Green",
-				},
-				{
-					name: "Orange",
-				},
-				{
-					name: "Purple",
-				},
-				{
-					name: "Red",
-				},
-				{
-					name: "Yellow",
-				},
-				{
-					name: "Violet",
-				}
-			]
-		},
-		vehicles: {
-			name: "Vehicles",
-			description: "Everything from cars to planes.",
-			items: [
-				{
-					name: "Cars",
-				},
-				{
-					name: "Planes",
-				},
-				{
-					name: "Construction",
-				}
-			]
-		}
-	};
-	$(document).bind( "pagebeforechange", function( e, data ) {
-
-		// We only want to handle changePage() calls where the caller is
-		// asking us to load a page by URL.
-		if ( typeof data.toPage === "string" ) {
-
-			// We are being asked to load a page by URL, but we only
-			// want to handle URLs that request the data for a specific
-			// category.
-			var u = $.mobile.path.parseUrl( data.toPage ),
-				re = /^#category-item/;
-
-			if ( u.hash.search(re) !== -1 ) {
-
-				// We're being asked to display the items for a specific category.
-				// Call our internal method that builds the content for the category
-				// on the fly based on our in-memory category data structure.
-				showCategory( u, data.options );
-
-				// Make sure to tell changePage() we've handled this call so it doesn't
-				// have to do anything.
-				e.preventDefault();
-			}
-		}
-	});
-	function showCategory( urlObj, options )
-	{
-		var categoryName = urlObj.hash.replace( /.*category=/, "" ),
-
-			// Get the object that represents the category we
-			// are interested in. Note, that at this point we could
-			// instead fire off an ajax request to fetch the data, but
-			// for the purposes of this sample, it's already in memory.
-			category = categoryData[ categoryName ],
-
-			// The pages we use to display our content are already in
-			// the DOM. The id of the page we are going to write our
-			// content into is specified in the hash before the '?'.
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-
-		if ( category ) {
-			// Get the page we are going to dump our content into.
-			var $page = $( pageSelector ),
-
-				// Get the header for the page.
-				$header = $page.children( ":jqmData(role=header)" ),
-
-				// Get the content area element for the page.
-				$content = $page.children( ":jqmData(role=content)" ),
-
-				// The markup we are going to inject into the content
-				// area of the page.
-				markup = "<p>" + category.description + "</p><ul data-role='listview' data-inset='true'>",
-
-				// The array of items for this category.
-				cItems = category.items,
-
-				// The number of items in the category.
-				numItems = cItems.length;
-
-			// Generate a list item for each item in the category
-			// and add it to our markup.
-			for ( var i = 0; i < numItems; i++ ) {
-				markup += "<li>" + cItems[i].name + "</li>";
-			}
-			markup += "</ul>";
-
-			// Find the h1 element in our header and inject the name of
-			// the category into it.
-			$header.find( "h1" ).html( category.name );
-
-			// Inject the category items markup into the content element.
-			$content.html( markup );
-
-			// Pages are lazily enhanced. We call page() on the page
-			// element to make sure it is always enhanced before we
-			// attempt to enhance the listview markup we just injected.
-			// Subsequent calls to page() are ignored since a page/widget
-			// can only be enhanced once.
-			$page.page();
-
-			// Enhance the listview we just injected.
-			$content.find( ":jqmData(role=listview)" ).listview();
-
-			// We don't want the data-url of the page we just modified
-			// to be the url that shows up in the browser's location field,
-			// so set the dataUrl option to the URL for the category
-			// we just loaded.
-			options.dataUrl = urlObj.href;
-
-			// Now call changePage() and tell it to switch to
-			// the page we just modified.
-			$.mobile.changePage( $page, options );
-		}
 	}
-	</script>
+	function initialize(pos) {
+		var geocoder = new google.maps.Geocoder(),
+		latlng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+		geocoder.geocode({'latLng': latlng}, function(results, status) {
+			if (status == google.maps.GeocoderStatus.OK) {
+				var cityname=results[0].address_components[results[0].address_components.length-3].long_name;
+				$.ajax({
+					url:'/contacts?location='+cityname,
+					dataType:'json',
+					success: function(data){
+						var template=$('#contactsList').html(),list=[],item=data.items;
+						for(var i in item){
+							list.push(MessageFormat(decodeURI(template),item[i].picture,item[i].name,item[i].headline,item[i].id,item[i].link))
+						};
+						$('#contactsList').html(list.join(''));
+						showCard()
+					}
+				})
+				
+			} else {
+			alert("Geocoder failed due to: " + status);
+			}
+		});
+	}
+	if (navigator.geolocation) {
+	  navigator.geolocation.getCurrentPosition(initialize);
+	} else {
+	  error('not supported');
+	}	
 
+
+</script>
 </body>
 </html>

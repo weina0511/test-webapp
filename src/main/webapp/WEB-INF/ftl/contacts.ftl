@@ -1,11 +1,11 @@
-<#list contacts as item>
-	<div class="box">
-		<a href="${item.link}" class="media"><img src="${item.picture_small}" alt="${item.name}"></a>
-		<div class="content">
-			<p class="username"><a href="${item.link}">${item.name}</a></p>
-			<p class="headline">${item.headline}</p>
-			${item.id}
-		</div>		
-	</div>
-</#list>
-	
+
+
+{
+	"items": [<#list contacts as item>{
+		"link":"${item.link}",
+		"picture":"${item.picture_small}",
+		"name":"${item.name}",
+		"headline":"${item.headline}",
+		"id":"${item.id}"
+	}<#if item_has_next>,</#if></#list>]
+}
