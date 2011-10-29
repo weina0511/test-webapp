@@ -1,4 +1,4 @@
-<#list contacts.data as item>
+<#list contacts as item>
 	<div class="box">
 		<a href="${item.link}" class="media"><img src="${item.picture_small}" alt="${item.name}"></a>
 		<div class="content">

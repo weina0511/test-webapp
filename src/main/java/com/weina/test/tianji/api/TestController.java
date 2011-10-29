@@ -79,9 +79,9 @@ public class TestController {
 		 ResponseEntity<Users> ss =  restTemplate.getForEntity(apiBase+"/me/contacts?user_detail=full&access_token="+accessToken,Users.class);
 		//User user =  ModelUtils.getUserCardByString(ss.getBody());
 		 List<User> list = ss.getBody().getData();
-		 for(User u:list){
-			 if(!u.getLocation().getCity().equals(location)){
-				 list.remove(u);
+		 for(int i=0;i<list.size();i++){
+			 if(!list.get(i).getLocation().getCity().equals(location)){
+				 list.remove(list.get(i));
 			 }
 		 }
 		 model.addAttribute("contacts", list);
