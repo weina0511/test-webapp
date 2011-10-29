@@ -31,7 +31,7 @@
 			<ul>
 				<#list feedlist.data as item >
 				<li>
-				phone:${item.from}
+				    phone:${item.from.picture_small}
 					<p class="username" link="${item.link}">--${item.name}</p>
 					<p class="message">${item.label} ${item.message}</p>
 					<p class="date">${item.updated_time?string("yyyy-MM-dd")}</p>

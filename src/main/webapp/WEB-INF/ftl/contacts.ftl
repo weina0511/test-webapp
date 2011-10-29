@@ -5,6 +5,7 @@ dddd
 		<div class="content">
 			<p class="username"><a href="${item.link}">${item.name}</a></p>
 			<p class="headline">${item.headline}</p>
+			${item.id}
 		</div>		
 	</div>
 	</#list>

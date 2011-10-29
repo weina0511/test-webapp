@@ -20,7 +20,7 @@ import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import com.weina.test.tianji.api.model.FeedModel;
+import com.weina.test.tianji.api.model.Card;
 import com.weina.test.tianji.api.model.User;
 
 public class ModelUtils {
@@ -88,15 +88,15 @@ public class ModelUtils {
 		}
 		return user;
 	}
-	public static List<FeedModel> getListFeedByString(String s){
-		List<FeedModel> list = new ArrayList<FeedModel>();
+	public static List<Card> getListFeedByString(String s){
+		List<Card> list = new ArrayList<Card>();
 		JSONObject jsonfeed;
 		try {
 			jsonfeed = new JSONObject(s);
 			JSONArray dataArray = jsonfeed.getJSONArray("data");
 			for(int i=0;i<dataArray.length();i++){
 				String oo = dataArray.getJSONObject(i).toString();
-				FeedModel model = new FeedModel();
+				Card model = new Card();
 				model.setUserName(jsonfeed.getString("name"));
 				model.setSenderName(getStrByKey("name",oo));
 				model.setSenderLink(getStrByKey("link",oo));
@@ -189,7 +189,7 @@ public class ModelUtils {
 //		keys.put("number", String.class);
 //		keys.put("count", Integer.class);
 		//System.out.println(getStrByKey(str, keys));
-		List<FeedModel> feedlist = getListFeedByString(ss.getBody());
+		List<Card> feedlist = getListFeedByString(ss.getBody());
 		System.out.println("1111="+feedlist.get(0).toString());
 //		System.out.println(getStrByKey("emails", str, String.class));
 //		System.out.println(getStrByKey("number", str, String.class));
