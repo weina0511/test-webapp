@@ -81,6 +81,15 @@ public class Feed {
 	@JsonIgnoreProperties(ignoreUnknown=true)
 	public static class From{
 		private String picture_small;
+		private String link;
+
+		public String getLink() {
+			return link;
+		}
+
+		public void setLink(String link) {
+			this.link = link;
+		}
 
 		public String getPicture_small() {
 			return picture_small;
@@ -92,8 +101,9 @@ public class Feed {
 
 		@Override
 		public String toString() {
-			return "From [picture_small=" + picture_small + "]";
+			return "From [picture_small=" + picture_small + ", link=" + link + "]";
 		}
+
 		
 	}
 	

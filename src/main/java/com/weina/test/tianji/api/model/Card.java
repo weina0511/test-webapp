@@ -1,6 +1,6 @@
 package com.weina.test.tianji.api.model;
 
-public class FeedModel {
+public class Card {
 	private String userName;
 	private String senderName;
 	private String message;

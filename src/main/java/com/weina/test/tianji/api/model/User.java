@@ -89,7 +89,7 @@ public class User {
 		this.location = location;
 	}
 	@JsonIgnoreProperties(ignoreUnknown=true)
-	static class Location{
+	public static class Location{
 		private String city;
 
 		public String getCity() {
