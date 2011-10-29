@@ -13,9 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
+import com.weina.test.tianji.api.model.Card;
 import com.weina.test.tianji.api.model.Feed;
 import com.weina.test.tianji.api.model.Message;
 import com.weina.test.tianji.api.model.User;
@@ -69,7 +69,7 @@ public class TestController {
 	}
 	@RequestMapping(value="card",method=RequestMethod.GET)
 	public String getProfleCard(Model model,@RequestParam String id){
-		 ResponseEntity<User> ss =  restTemplate.getForEntity(apiBase+"/"+id+"/contact_cards?access_token="+accessToken, User.class);
+		 ResponseEntity<Card> ss =  restTemplate.getForEntity(apiBase+"/"+id+"/contact_cards?access_token="+accessToken, Card.class);
 		//User user =  ModelUtils.getUserCardByString(ss.getBody());
 		 model.addAttribute("card", ss.getBody());
 		return "card";
@@ -103,14 +103,14 @@ public class TestController {
 //		MappingJacksonHttpMessageConverter mc = new MappingJacksonHttpMessageConverter();
 //		rt.getMessageConverters().add(mc);
         String accessToken = "5cd49226-9152-431f-886c-567d9f8666e1";
-//        ResponseEntity<String> ss =  rt.getForEntity(apiBase+"/me/contact_cards?access_token="+accessToken, String.class);
+        ResponseEntity<Card> ss =  rt.getForEntity(apiBase+"/me/contact_cards?access_token="+accessToken, Card.class);
      //   ResponseEntity<User> ss =  rt.getForEntity(apiBase+"/69372bc566bb8f0dc0b88bbe32796e94/contact_cards?user_detail=full&access_token="+accessToken, User.class);
         Message o = new Message();
-        ResponseEntity<Feed> ss =  rt.getForEntity(apiBase+"/me/home_newsfeed?user_detail=full&?user_detail=full&access_token="+accessToken, Feed.class);
+//        ResponseEntity<Feed> ss =  rt.getForEntity(apiBase+"/me/home_newsfeed?user_detail=full&?user_detail=full&access_token="+accessToken, Feed.class);
         o.setMessage("hello,everyone!");
       // ResponseEntity<String> ss =  rt.postForEntity(apiBase+"/status?access_token="+accessToken,o ,String.class);
-        System.out.println(ss.getBody().getData().size()+"==="+ss.getBody().getData().get(0));
-      //  System.out.println(ss.getBody());
+      //  System.out.println(ss.getBody().getData().size()+"==="+ss.getBody().getData().get(0));
+       System.out.println(ss.getBody());
 	}
 	 
 }

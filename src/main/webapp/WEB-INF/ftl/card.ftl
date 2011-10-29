@@ -1,6 +1,5 @@
 card
 
-${card.phone}
-
+${card}
 
 =======

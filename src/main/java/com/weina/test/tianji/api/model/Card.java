@@ -1,52 +1,71 @@
 package com.weina.test.tianji.api.model;
 
+import java.util.List;
+
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class Card {
-	private String userName;
-	private String senderName;
-	private String message;
-	private String senderPhoto;
-	private String updated_time;
-	
-	public String getUpdated_time() {
-		return updated_time;
+	private List<Data> data;
+	@JsonIgnoreProperties(ignoreUnknown=true)
+	public static class Data{
+		private List<String> emails;
+		private List<Phones> phones;
+		
+		public List<Phones> getPhones() {
+			return phones;
+		}
+
+		public void setPhones(List<Phones> phones) {
+			this.phones = phones;
+		}
+
+		public List<String> getEmails() {
+			return emails;
+		}
+
+		public void setEmails(List<String> emails) {
+			this.emails = emails;
+		}
+
+		@Override
+		public String toString() {
+			return "Data [emails=" + emails + ", phones=" + phones + "]";
+		}
+
+		
+		
 	}
-	public void setUpdated_time(String updated_time) {
-		this.updated_time = updated_time;
+	@JsonIgnoreProperties(ignoreUnknown=true)
+	public static class Phones{
+		private String number;
+		private String type;
+		public String getNumber() {
+			return number;
+		}
+		public void setNumber(String number) {
+			this.number = number;
+		}
+		public String getType() {
+			return type;
+		}
+		public void setType(String type) {
+			this.type = type;
+		}
+		@Override
+		public String toString() {
+			return "Phones [number=" + number + ", type=" + type + "]";
+		}
+		
 	}
-	public String getUserName() {
-		return userName;
+	public List<Data> getData() {
+		return data;
 	}
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-	public String getSenderName() {
-		return senderName;
+	public void setData(List<Data> data) {
+		this.data = data;
 	}
 	@Override
 	public String toString() {
-		return "FeedModel [userName=" + userName + ", senderName=" + senderName + ", message=" + message + ", senderPhoto=" + senderPhoto + ", updated_time=" + updated_time + ", senderLink="
-				+ senderLink + "]";
+		return "Card [data=" + data + "]";
 	}
-	public void setSenderName(String senderName) {
-		this.senderName = senderName;
-	}
-	public String getMessage() {
-		return message;
-	}
-	public void setMessage(String message) {
-		this.message = message;
-	}
-	public String getSenderPhoto() {
-		return senderPhoto;
-	}
-	public void setSenderPhoto(String senderPhoto) {
-		this.senderPhoto = senderPhoto;
-	}
-	public String getSenderLink() {
-		return senderLink;
-	}
-	public void setSenderLink(String senderLink) {
-		this.senderLink = senderLink;
-	}
-	private String senderLink;
+	
 }
