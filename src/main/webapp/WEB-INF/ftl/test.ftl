@@ -4,14 +4,10 @@
 	<meta charset="UTF-8">
 	<title>app</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1"> 
-	<script type="text/javascript" src="./jquery-1.6.4.min.js"></script>
-	<script type="text/javascript" src="./jquery.mobile-1.0rc2.min.js"></script>
-
-	
-	<link rel="stylesheet" type="text/css" href="./jquery.mobile.structure-1.0rc2.min.css" media="all">
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0rc2/jquery.mobile-1.0rc2.min.css" />
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/mobile/1.0rc2/jquery.mobile-1.0rc2.min.js"></script>				
 	<style type="text/css">
-		#hd li{display:inline-block;width:33%;}
-		
 		.box{}
 		.box .media{float:left;}
 		.box .img{display:block;}
@@ -21,12 +17,12 @@
 	</style>
 </head>
 <body>
+	<!-- 
 	<a data-transition="slide" data-rel="dialog" data-role="button" href="#dialog" data-theme="c" class="ui-btn ui-btn-corner-all ui-shadow ui-btn-up-c"><span aria-hidden="true" class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">slide</span></span></a>
-	<div id="doc">
-		<div id="hd">
-			<ul><li><a href="#" data-transition="slide">Status</a></li><li>Contacts</li><li>Groups</li></ul>	
-		</div>
-		<div id="bd">
+	 -->
+	<div data-role="page">
+		<#include 'header.ftl'/>
+		<div data-role="content">
 			<div id="status">
 				<div class="box">
 					<a href="#" class="media"><img src="" alt=""></a><div class="">
@@ -41,19 +37,21 @@
 					<p><input type="submit" value="POST" class="submit"></p>
 				</form>
 			</div>
-			
-			<!-- user's contacts -->
-			<div id="contacts"></div>
-			
-			<!-- user's groups -->
-			<div id="groups"></div>
-			
-			
-			<!-- user's card -->
-			<div class="card"></div>
 		</div>
 	</div>
+</div>
+<div data-role="page" id="contacts">
+	<#include 'header.ftl'/>
+	<div data-role="content">contacts</div>
+</div>
+<div data-role="page" id="groups">
+	<#include 'header.ftl'/>
+	<div data-role="content">groups</div>
+</div>
 	<script type="text/javascript">
+	$(document.body).delegate('li','click',function(){
+	})
+	/*
 		var box='<div class="box"><a href="{0}" class="media"><img src="{1}" alt=""></a><div class="content"><p class="username"><a href="{0}">{2}</a></p><p class="headline">{3}</p></div>';
 		var card='<div class="box"><a href="{0}" class="media"><img src="{1}" alt=""></a><div class="content"><p class="username"><a href="{0}">{2}</a></p><p class="headline">{3}</p></div>';
 		var MessageFormat = function(str){
@@ -62,8 +60,11 @@
 		        return args[value];
 		    })
 		};
-		$('#hd span').bind('click',function(){
+	
+	
+		$('#hd a').bind('click',function(){
 			var name=this.innerHTML;
+			console.log(this.innerHTML)
 			if($('#'+name).html()==''){
 				$.ajax({
 					url:'/getid',
@@ -74,7 +75,6 @@
 				})
 			}
 		})
-		/*
 		var getLocation=function(position){
 			var url=['http://maps.google.com/maps?q=',position.coords.latitude,',',position.coords.longitude].join('');
 		}
@@ -82,5 +82,6 @@
 		
 		*/
 	</script>
+	
 </body>
 </html>
