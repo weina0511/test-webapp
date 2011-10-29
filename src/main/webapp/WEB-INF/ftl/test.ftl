@@ -35,7 +35,7 @@
 			<ul data-role="listview" data-inset="true" id="statusList">
 				<#list feedlist.data as item>
 				<li>
-					<a href="${item.from.link}"><img src="${item.from.picture_small}" alt="${item.name}">
+					<a href="${item.from.link}" target="_blank"><img src="${item.from.picture_small}" alt="${item.name}">
 					<h3 class="username" >${item.name}</h3>
 					<p class="message">${item.label} ${item.message}</p>
 					<p class="date">${item.updated_time?string("yyyy-MM-dd")}</p>
@@ -72,7 +72,8 @@
 				<ul>
 					<li><a data-transition="slide" data-rel="status" href="#status" data-direction="reverse">Status</a></li>
 					<li><a data-transition="slide" data-rel="contacts" href="#contacts" data-direction="reverse">contacts</a></li>
-					<li><a data-transition="slide" data-rel="groups" href="#groups" class="ui-btn-active">groups</a></li>
+				
+				<!-- 	<li><a data-transition="slide" data-rel="groups" href="#groups" class="ui-btn-active">groups</a></li>  -->
 				</ul>
 			</div>
 		</div>
