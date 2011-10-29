@@ -1,5 +1,8 @@
 package com.weina.test.tianji.api.model;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class User {
 	private String id;
 	private String name;
@@ -12,6 +15,7 @@ public class User {
 	private String email;
 	private String phone;
 	private String mobile;
+	private Location location;
 	public String getEmail() {
 		return email;
 	}
@@ -77,6 +81,25 @@ public class User {
 	}
 	public void setCity(String city) {
 		this.city = city;
+	}
+	public Location getLocation() {
+		return location;
+	}
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+	@JsonIgnoreProperties(ignoreUnknown=true)
+	static class Location{
+		private String city;
+
+		public String getCity() {
+			return city;
+		}
+
+		public void setCity(String city) {
+			this.city = city;
+		}
+		
 	}
 	@Override
 	public String toString() {

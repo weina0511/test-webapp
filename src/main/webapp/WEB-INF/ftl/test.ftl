@@ -30,11 +30,11 @@
 		</div>
 		<div data-role="content" class="margin">
 			<ul data-role="listview" data-inset="true" id="statusList">
-				<#list feedlist as feed>
+				<#list feedlist.data as item>
 				<li>
-					<h3><a href="${feed.senderLink}">${feed.senderName}</a></h3>
-					<p>${feed.message}</p>
-					<p class="ui-li-aside">${feed.updated_time}</p>
+					<p class="username" link="${item.link}">--${item.name}</p>
+					<p class="message">${item.label} ${item.message}</p>
+					<p class="date">${item.updated_time?string("yyyy-MM-dd")}</p>
 				</li>
 				</#list>
 			</ul>
