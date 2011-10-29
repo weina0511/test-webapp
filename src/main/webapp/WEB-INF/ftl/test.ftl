@@ -24,13 +24,15 @@
 		<#include 'header.ftl'/>
 		<div data-role="content">
 			<div id="status">
-				<div class="box">
-					<a href="#" class="media"><img src="" alt=""></a><div class="">
-					<div class="content">
-						<p class="username"><a href="#">name</a></p>
-						<p>status</p>
-					</div>
-				</div>
+			<ul>
+				<#list feedlist as feed>
+				<li>
+					<p class="username" link="${feed.senderLink}">${feed.senderName}</p>
+					<p class="message">${feed.message}</p>
+					<p class="date">${feed.updated_time}</p>
+				</li>
+				</#list>
+			</ul>
 				<form action="#">
 					<textarea id=""></textarea>
 					<p>post a status</p>
@@ -78,8 +80,24 @@
 		var getLocation=function(position){
 			var url=['http://maps.google.com/maps?q=',position.coords.latitude,',',position.coords.longitude].join('');
 		}
+		    function handleLocationError(error) {
+		      switch (error.code) {
+		        case 0:
+		        updateStatus("There was an error while retrieving your location: " +
+		                      error.message);
+		break;
+		        case 1:
+		        updateStatus("The user prevented this page from retrieving a location.");
+		        break;
+		        case 2:
+		        updateStatus("The browser was unable to determine your location: " +
+		                      error.message);
+		break;
+		        case 3:
+		        updateStatus("The browser timed out before retrieving the location.");
+		        break;
+		} }
 		navigator.geolocation.getCurrentPosition(getLocation);
-		
 		*/
 	</script>
 	
