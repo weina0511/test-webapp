@@ -41,8 +41,13 @@ public class TestController {
 	    }
 	@RequestMapping(method= RequestMethod.GET,value="status")
 	public String get(@RequestParam(required=false) String code,HttpServletRequest request, HttpServletResponse response,Model model){
+<<<<<<< HEAD
 	 //      redirectUri = "http://"+request.getRemoteHost()+"/status"; 
 	 redirectUri = "http://192.168.1.112/status"; 
+=======
+	       redirectUri = request.getRequestURL().toString(); 
+	 //redirectUri = "http://10.0.2.1/status"; 
+>>>>>>> fc5922223860fcac62cc753e901dc997b1111949
 	System.out.println("Remote url is " + redirectUri) ;
 	        if (code == null || "".equals(code)) {  
 	            // Step 1 - Redirect user to provider for authorization  
@@ -81,7 +86,7 @@ public class TestController {
 	}
 	@RequestMapping(value="contacts",method=RequestMethod.GET)
 	public String getProfleContacts(Model model,@RequestParam String location){
-		 ResponseEntity<Users> ss =  restTemplate.getForEntity(apiBase+"/me/contacts?user_detail=full&access_token="+accessToken,Users.class);
+		 ResponseEntity<Users> ss =  restTemplate.getForEntity(apiBase+"/me/contacts?user_detail=full&limit=50&access_token="+accessToken,Users.class);
 		//User user =  ModelUtils.getUserCardByString(ss.getBody());
 		 List<User> list = ss.getBody().getData();
 		 for(int i=0;i<list.size();i++){
@@ -89,6 +94,7 @@ public class TestController {
 				 list.remove(list.get(i));
 			 }
 		 }
+		 System.out.println("list.size="+list.size());
 		 model.addAttribute("contacts", list);
 		return "contacts";
 	}

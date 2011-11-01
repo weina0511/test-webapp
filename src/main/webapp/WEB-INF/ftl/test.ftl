@@ -7,7 +7,6 @@
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0rc2/jquery.mobile-1.0rc2.min.css" />
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
 	<script type="text/javascript" src="http://code.jquery.com/mobile/1.0rc2/jquery.mobile-1.0rc2.min.js"></script>				
-	<script type="text/javascript" src="http://www.ryanscherf.net/demos/swipe/jquery.jswipe.js"></script>
 	<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
 </head>
 <body>
@@ -132,7 +131,7 @@
 	  error('not supported');
 	}	
 
-
+	
 </script>
 </body>
 </html>
