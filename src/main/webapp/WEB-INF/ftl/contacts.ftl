@@ -1,5 +1,3 @@
-
-
 {
 	"items": [<#list contacts as item>{
 		"link":"${item.link}",

@@ -41,13 +41,8 @@ public class TestController {
 	    }
 	@RequestMapping(method= RequestMethod.GET,value="status")
 	public String get(@RequestParam(required=false) String code,HttpServletRequest request, HttpServletResponse response,Model model){
-<<<<<<< HEAD
-	 //      redirectUri = "http://"+request.getRemoteHost()+"/status"; 
-	 redirectUri = "http://192.168.1.112/status"; 
-=======
 	       redirectUri = request.getRequestURL().toString(); 
 	 //redirectUri = "http://10.0.2.1/status"; 
->>>>>>> fc5922223860fcac62cc753e901dc997b1111949
 	System.out.println("Remote url is " + redirectUri) ;
 	        if (code == null || "".equals(code)) {  
 	            // Step 1 - Redirect user to provider for authorization  
