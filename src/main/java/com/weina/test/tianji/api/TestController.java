@@ -81,7 +81,7 @@ public class TestController {
 	}
 	@RequestMapping(value="contacts",method=RequestMethod.GET)
 	public String getProfleContacts(Model model,@RequestParam String location){
-		 ResponseEntity<Users> ss =  restTemplate.getForEntity(apiBase+"/me/contacts?user_detail=full&access_token="+accessToken,Users.class);
+		 ResponseEntity<Users> ss =  restTemplate.getForEntity(apiBase+"/me/contacts?user_detail=full&limit=50&access_token="+accessToken,Users.class);
 		//User user =  ModelUtils.getUserCardByString(ss.getBody());
 		 List<User> list = ss.getBody().getData();
 		 for(int i=0;i<list.size();i++){
@@ -89,6 +89,7 @@ public class TestController {
 				 list.remove(list.get(i));
 			 }
 		 }
+		 System.out.println("list.size="+list.size());
 		 model.addAttribute("contacts", list);
 		return "contacts";
 	}
