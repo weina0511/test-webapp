@@ -7,6 +7,7 @@
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0rc2/jquery.mobile-1.0rc2.min.css" />
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
 	<script type="text/javascript" src="http://code.jquery.com/mobile/1.0rc2/jquery.mobile-1.0rc2.min.js"></script>				
+	<script type="text/javascript" src="http://www.ryanscherf.net/demos/swipe/jquery.jswipe.js"></script>
 	<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
 </head>
 <body>
@@ -66,8 +67,8 @@
 		<ul data-role="listview" data-inset="true" data-theme="c"><li>
 			<img src="{1}" alt="{2}" class="img"/>
 			<h3><a href="{0}">{2}</a></h3>
-			<p class="email"><a href="mailto:{3}">{3}</a></p>
-			<p class="phone"><a href="tel:{4}">{4}</a></p>
+			<p class="email"><span>邮件：</span><a href="mailto:{3}">{3}</a></p>
+			<p class="phone"><span>电话：</span><a href="tel:{4}">{4}</a></p>
 		</li></ul>
 		<p><a href="#contacts" data-role="button" data-inline="true">返回</a></p>
 		</div>
