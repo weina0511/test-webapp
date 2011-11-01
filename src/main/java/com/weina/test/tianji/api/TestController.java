@@ -109,14 +109,14 @@ public class TestController {
 //		MappingJacksonHttpMessageConverter mc = new MappingJacksonHttpMessageConverter();
 //		rt.getMessageConverters().add(mc);
         String accessToken = "5cd49226-9152-431f-886c-567d9f8666e1";
-        ResponseEntity<Card> ss =  rt.getForEntity(apiBase+"/me/contact_cards?access_token="+accessToken, Card.class);
+ //       ResponseEntity<Card> ss =  rt.getForEntity(apiBase+"/me/contact_cards?access_token="+accessToken, Card.class);
      //   ResponseEntity<User> ss =  rt.getForEntity(apiBase+"/69372bc566bb8f0dc0b88bbe32796e94/contact_cards?user_detail=full&access_token="+accessToken, User.class);
         Message o = new Message();
-//        ResponseEntity<Feed> ss =  rt.getForEntity(apiBase+"/me/home_newsfeed?user_detail=full&?user_detail=full&access_token="+accessToken, Feed.class);
+        ResponseEntity<Feed> ss =  rt.getForEntity(apiBase+"/me/home_newsfeed?user_detail=full&?user_detail=full&access_token="+accessToken, Feed.class);
         o.setMessage("hello,everyone!");
       // ResponseEntity<String> ss =  rt.postForEntity(apiBase+"/status?access_token="+accessToken,o ,String.class);
-      //  System.out.println(ss.getBody().getData().size()+"==="+ss.getBody().getData().get(0));
-       System.out.println(ss.getBody());
+        System.out.println(ss.getBody().getData().size()+"==="+ss.getBody().getData().get(0));
+      // System.out.println(ss.getBody());
 	}
 	 
 }
