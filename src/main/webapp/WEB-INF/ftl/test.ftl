@@ -22,7 +22,7 @@
 		<div data-role="content" class="ui-content">
 			<ul data-role="listview" data-inset="true" id="statusList">
 				<#list feedlist.data as item>
-				<li data-id="${item.id}" data-url="${item.from.link}">
+				<li data-id="${item.from.id}" data-url="${item.from.link}">
 					<a href="#dialog" data-transition="pop" data-rel="dialog" class="toCard"><img src="${item.from.picture_small}" alt="${item.name}">
 					<h3 class="username" >${item.name}</h3>
 					<p class="message">${item.label} ${item.message}</p>
@@ -51,7 +51,7 @@
 	</div>
 	<div data-role="page" id="dialog"><div data-role="head">
 		
-	</div><div data-role="content"><ul data-role="listview" data-inset="true" data-theme="c"><li><img src="about:blank" alt="" class="img"/><h3><a href="{0}">{1}</a></h3><p class="email"><span>邮件：</span><a href="mailto:{2}">{2}</a></p><p class="phone"><span>电话：</span><a href="tel:{3}">{3}</a></p></li></ul><p><a href="#{4}" data-role="button" data-inline="true" data-direction="reverse">返回</a></p></div></div>
+	</div><div data-role="content"><ul data-role="listview" data-inset="true" data-theme="c"><li><img src="about:blank" alt="" class="img"/><h3><a href="{0}">{1}</a></h3><p class="email"><span>邮件：</span><a href="mailto:{2}">{2}</a></p><p class="phone"><span>电话：</span><a href="tel:{3}">{3}</a></p></li></ul><p><a href="{4}" data-role="button" data-inline="true" data-direction="reverse">返回</a></p></div></div>
 	<script type="text/javascript">
 	var MF = function(str){
 	    var args = [].slice.call(arguments,1);
@@ -113,12 +113,8 @@
 	} else {
 	  error('not supported');
 	};
-
-
-
 	var showCard=function(){
 		var that=this;
-		//item='<ul data-role="listview" data-inset="true" data-theme="c"><li><img src="{1}" alt="{2}" class="img"/><h3><a href="{0}">{2}</a></h3><p class="email"><span>邮件：</span><a href="mailto:{3}">{3}</a></p><p class="phone"><span>电话：</span><a href="tel:{4}">{4}</a></p></li></ul><p><a href="#{5}" data-role="button" data-inline="true" data-direction="reverse">返回</a></p>';
 		$('body').delegate('a.toCard','click',function(){
 			var self=this;
 			$.ajax({
@@ -135,7 +131,7 @@
 						link:li.attr('data-url'),
 						target:div.attr('id')
 					});
-					$('#dialog').html(MF(decodeURI(that.t),data.link,data.name,data.email[0],data.phone[0],data.target))
+					$('#dialog').html(MF(decodeURI(that.t),data.link,data.name,data.email[0],data.phone[0],'#'+data.target))
 					$('#dialog img').attr('src',data.picture)
 
 				}
