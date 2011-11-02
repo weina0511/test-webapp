@@ -59,6 +59,7 @@
 	        return args[value];
 	    })
 	};
+	var toContacts
 	function showCategory( urlObj, options ,temp){
 		var pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 		var $page = $(pageSelector),
@@ -90,7 +91,7 @@
 						};
 						list.push('</ul>');
 						
-						var c=function( e, data ) {
+						toContact=function( e, data ) {
 							if ( typeof data.toPage === "string" ) {
 								var u = $.mobile.path.parseUrl( data.toPage ),re = /^#contacts/;
 								if ( u.hash.search(re) !== -1 ) {
@@ -99,7 +100,14 @@
 								}
 							}
 						};
-						$(document.body).bind( "pagebeforechange", c);	
+						$(document.body).bind( "pagebeforechange", toContact);	
+						$('#status').swipeleft(function(){
+							location.href='#contacts';
+						});
+						$('#contacts').swiperight(function(){
+							location.href='#status';
+						});
+						
 					}
 				})
 				
@@ -138,7 +146,7 @@
 			})
 		})
 	};
-	showCard()	
+	showCard();
 </script>
 </body>
 </html>
