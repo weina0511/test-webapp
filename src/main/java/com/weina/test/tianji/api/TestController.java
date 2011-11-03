@@ -32,7 +32,7 @@ public class TestController {
 	    private static final String accessTokenURL = oauthBase + "/token";  
 	    private static final String apiBase = "https://api.tianji.com";  
 	    private static final String localhost = "http://localhsot";
-	    private static String accessToken = null;
+	    private String accessToken = null;
 	    private static String redirectUri = null;
 	    private static RestTemplate restTemplate;
 	    static{
