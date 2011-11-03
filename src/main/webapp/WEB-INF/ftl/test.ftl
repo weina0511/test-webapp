@@ -23,7 +23,7 @@
 			<ul data-role="listview" data-inset="true" id="statusList">
 				<#list feedlist.data as item>
 				<li data-id="${item.from.id}" data-url="${item.from.link}">
-					<a href="#dialog" data-transition="pop" data-rel="dialog" class="toCard"><img src="${item.from.picture_small}" alt="${item.name}" class="img"/>
+					<a href="#dialog" data-rel="dialog" class="toCard"><img src="${item.from.picture_small}" alt="${item.name}" class="img"/>
 					<h3 class="username" >${item.name}</h3>
 					<p class="message">${item.label} ${item.message}</p>
 					<p class="date">${item.updated_time?string("yyyy-MM-dd")}</p>
@@ -49,9 +49,7 @@
 		</div>
 		<div data-role="content" class="ui-content"></div>
 	</div>
-	<div data-role="page" id="dialog"><div data-role="head">
-		
-	</div><div data-role="content"></div></div>
+	<div data-role="page" id="dialog"><div data-role="head"></div><div data-role="content"></div></div>
 	<script type="text/javascript">
 	var MF = function(str){
 	    var args = [].slice.call(arguments,1);
@@ -119,7 +117,7 @@
 						target:div.attr('id')
 					});
 					
-					var	template=MF(decodeURI('<ul data-role="listview" data-inset="true" data-theme="c"><li><img src="{5}" alt="" class="img"/><h3><a href="{0}">{1}</a></h3><p class="email"><span>邮件：</span><a href="mailto:{2}">{2}</a></p><p class="phone"><span>电话：</span><a href="tel:{3}">{3}</a></p></li></ul><p><a href="{4}" data-role="button" data-inline="true" data-direction="reverse">返回</a></p>'),data.link,data.name,data.email[0],data.phone[0],'#'+data.target,data.picture)
+					var	template=MF(decodeURI('<ul data-role="listview" data-inset="true" data-theme="c"><li><img src="{5}" alt="" class="img"/><h3><a href="{0}">{1}</a></h3><p class="email"><span>邮件：</span><a href="mailto:{2}">{2}</a></p><p class="phone"><span>电话：</span><a href="tel:{3}">{3}</a></p></li></ul><p><a href="#" data-role="button" data-inline="true" data-direction="reverse" data-rel="back">返回</a></p>'),data.link,data.name,data.email[0],data.phone[0],'#'+data.target,data.picture)
 
 					$content.html(template).trigger('create');
 					$page.page();
