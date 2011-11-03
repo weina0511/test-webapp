@@ -23,7 +23,7 @@
 			<ul data-role="listview" data-inset="true" id="statusList">
 				<#list feedlist.data as item>
 				<li data-id="${item.from.id}" data-url="${item.from.link}">
-					<a href="#dialog" data-transition="pop" data-rel="dialog" class="toCard"><img src="${item.from.picture_small}" alt="${item.name}">
+					<a href="#dialog" data-transition="pop" data-rel="dialog" class="toCard"><img src="${item.from.picture_small}" alt="${item.name}" class="img"/>
 					<h3 class="username" >${item.name}</h3>
 					<p class="message">${item.label} ${item.message}</p>
 					<p class="date">${item.updated_time?string("yyyy-MM-dd")}</p>
@@ -51,23 +51,13 @@
 	</div>
 	<div data-role="page" id="dialog"><div data-role="head">
 		
-	</div><div data-role="content"><ul data-role="listview" data-inset="true" data-theme="c"><li><img src="about:blank" alt="" class="img"/><h3><a href="{0}">{1}</a></h3><p class="email"><span>邮件：</span><a href="mailto:{2}">{2}</a></p><p class="phone"><span>电话：</span><a href="tel:{3}">{3}</a></p></li></ul><p><a href="{4}" data-role="button" data-inline="true" data-direction="reverse">返回</a></p></div></div>
+	</div><div data-role="content"></div></div>
 	<script type="text/javascript">
 	var MF = function(str){
 	    var args = [].slice.call(arguments,1);
 	    return str.replace(/\{([^}])\}/g,function(index,value){
 	        return args[value];
 	    });
-	};
-	var toContacts;
-	function showCategory( urlObj, options ,temp){
-		var $page = $('#contacts'),
-		$header = $page.children( ":jqmData(role=header)" ),
-		$content = $page.children( ":jqmData(role=content)" );
-		$header.html(temp[0]);
-		$content.html(temp[1]);
-		$page.page();
-		$content.find( ":jqmData(role=listview)" ).listview();
 	};
 	
 	function initialize(pos) {
@@ -118,30 +108,31 @@
 				url:'/card?id='+$(this).closest('li').attr('data-id'),
 				dataType:'json',
 				success: function(data){
-					if(!that.t){
-						that.t=$('#dialog').html();
-					}
-					var li=$(self).closest('li'),div=$(self).closest('div[data-role=content]').parent();
+					var li=$(self).closest('li'),
+						div=$(self).closest('div[data-role=content]').parent(),
+						$page=$('#dialog'),
+						$content=$page.children( ":jqmData(role=content)" );
 					data=$.extend(data,{
 						name:li.find('.username').html(),
 						picture:li.find('.img').attr('src'),
 						link:li.attr('data-url'),
 						target:div.attr('id')
 					});
-					$('#dialog').html(MF(decodeURI(that.t),data.link,data.name,data.email[0],data.phone[0],'#'+data.target))
-					$('#dialog img').attr('src',data.picture)
+					
+					var	template=MF(decodeURI('<ul data-role="listview" data-inset="true" data-theme="c"><li><img src="{5}" alt="" class="img"/><h3><a href="{0}">{1}</a></h3><p class="email"><span>邮件：</span><a href="mailto:{2}">{2}</a></p><p class="phone"><span>电话：</span><a href="tel:{3}">{3}</a></p></li></ul><p><a href="{4}" data-role="button" data-inline="true" data-direction="reverse">返回</a></p>'),data.link,data.name,data.email[0],data.phone[0],'#'+data.target,data.picture)
 
+					$content.html(template).trigger('create');
+					$page.page();
 				}
 			})
 		})
 	};
-	$('#status').swiperight(function(){
+	$('#status').swipeleft(function(){
 		$.mobile.changePage( "#contacts", { 
-//			allowSamePageTransition:true,
 			transition: "slide"
 		});
 	});
-	$('#contacts').swipeleft(function(){
+	$('#contacts').swiperight(function(){
 		$.mobile.changePage( "#status", {
 			transition: "slide",
 			reverse:true
