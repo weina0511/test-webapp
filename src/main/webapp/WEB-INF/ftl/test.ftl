@@ -14,7 +14,7 @@
 		<div data-role="head">
 			<div data-role="navbar">
 				<ul>
-					<li><a data-transition="slide" data-rel="status" href="#status" class="ui-btn-active">近况</a></li>
+					<li><a data-transition="slide" data-rel="status" href="#status" class="ui-btn-active ui-state-persist">近况</a></li>
 					<li><a data-transition="slide" data-rel="contacts" href="#contacts">附近的好友</a></li>
 				</ul>
 			</div>
@@ -43,7 +43,7 @@
 			<div data-role="navbar">
 				<ul>
 					<li><a data-transition="slide" data-rel="status" href="#status" data-direction="reverse">近况</a></li>
-					<li><a data-transition="slide" data-rel="contacts" href="#contacts" class="ui-btn-active">附近的好友</a></li>
+					<li><a data-transition="slide" data-rel="contacts" href="#contacts" class="ui-btn-active ui-state-persist">附近的好友</a></li>
 				</ul>
 			</div>
 		</div>
@@ -57,20 +57,17 @@
 	    var args = [].slice.call(arguments,1);
 	    return str.replace(/\{([^}])\}/g,function(index,value){
 	        return args[value];
-	    })
+	    });
 	};
-	var toContacts
+	var toContacts;
 	function showCategory( urlObj, options ,temp){
-		var pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-		var $page = $(pageSelector),
+		var $page = $('#contacts'),
 		$header = $page.children( ":jqmData(role=header)" ),
 		$content = $page.children( ":jqmData(role=content)" );
 		$header.html(temp[0]);
 		$content.html(temp[1]);
 		$page.page();
 		$content.find( ":jqmData(role=listview)" ).listview();
-		options.dataUrl = urlObj.href;
-		$.mobile.changePage( $page, options );
 	};
 	
 	function initialize(pos) {
@@ -85,29 +82,21 @@
 					success: function(data){						
 						var li='<li data-id="{3}" data-url="${4}"><a class="toCard" href="#dialog" data-transition="pop" data-rel="dialog"><img src="{0}" alt="{1}" class="img"/><h3 class="username" >{1}</h3><p class="headline">{2}</p></a></li>',
 						head='<div data-role="head"><div data-role="navbar"><ul><li><a data-transition="slide" data-rel="status" href="#status" data-direction="reverse">近况</a></li><li><a data-transition="slide" data-rel="contacts" href="#contacts" class="ui-btn-active">附近的好友</a></li></ul></div></div>',
-						list=['<ul data-role="listview" data-inset="true" id="contactsList">'],item=data.items;
+						list=['<ul data-role="listview" data-inset="true" id="contactsList">'],
+						item=data.items,
+						$page=$('#contacts'),
+						$header = $page.children( ":jqmData(role=header)" ),
+						$content = $page.children( ":jqmData(role=content)" );
+						
 						for(var i in item){
 							list.push(MF(decodeURI(li),item[i].picture,item[i].name,item[i].headline,item[i].id,item[i].link))
 						};
 						list.push('</ul>');
 						
-						toContact=function( e, data ) {
-							if ( typeof data.toPage === "string" ) {
-								var u = $.mobile.path.parseUrl( data.toPage ),re = /^#contacts/;
-								if ( u.hash.search(re) !== -1 ) {
-									showCategory( u, data.options,['<div data-role="head"><div data-role="navbar"><ul><li><a data-transition="slide" data-rel="status" href="#status" data-direction="reverse">近况</a></li><li><a data-transition="slide" data-rel="contacts" href="#contacts" class="ui-btn-active">附近的好友</a></li></ul></div></div>',list.join('')]);
-									e.preventDefault();
-								}
-							}
-						};
-						$(document.body).bind( "pagebeforechange", toContact);	
-						$('#status').swipeleft(function(){
-							location.href='#contacts';
-						});
-						$('#contacts').swiperight(function(){
-							location.href='#status';
-						});
-						
+						$header.html('<div data-role="head"><div data-role="navbar"><ul><li><a data-transition="slide" data-rel="status" href="#status" data-direction="reverse">近况</a></li><li><a data-transition="slide" data-rel="contacts" href="#contacts" class="ui-btn-active">附近的好友</a></li></ul></div></div>');
+						$content.html(list.join(''));
+						$page.page();
+						$content.find( ":jqmData(role=listview)" ).listview();
 					}
 				})
 				
@@ -146,6 +135,18 @@
 			})
 		})
 	};
+	$('#status').swiperight(function(){
+		$.mobile.changePage( "#contacts", { 
+//			allowSamePageTransition:true,
+			transition: "slide"
+		});
+	});
+	$('#contacts').swipeleft(function(){
+		$.mobile.changePage( "#status", {
+			transition: "slide",
+			reverse:true
+		});
+	});
 	showCard();
 </script>
 </body>
