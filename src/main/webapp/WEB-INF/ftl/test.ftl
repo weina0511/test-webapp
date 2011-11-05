@@ -20,22 +20,23 @@
 			</div>
 		</div>
 		<div data-role="content" class="ui-content">
+			<form action="/status" method="POST">
+				<h2>发布近况</h2>
+				<textarea id="message" name="message"></textarea>
+				<p class="buttons"><input type="submit" value="发布" class="submit" data-role="button" data-inline="true">&nbsp;<input type="button" value="发布当前位置" class="button" data-role="button" data-inline="true"></p>
+			</form>
+		
 			<ul data-role="listview" data-inset="true" id="statusList">
 				<#list feedlist.data as item>
 				<li data-id="${item.from.id}" data-url="${item.from.link}">
 					<a href="#dialog" data-rel="dialog" class="toCard"><img src="${item.from.picture_small}" alt="${item.name}" class="img"/>
 					<h3 class="username" >${item.name}</h3>
 					<p class="message">${item.label} ${item.message}</p>
-					<p class="date">${item.updated_time?string("yyyy-MM-dd")}</p>
+					<p class="date">${item.updated_time?string("yyyy-MM-dd HH:mm")}</p>
 					</a>
 				</li>
 				</#list>
 			</ul>
-			<form action="/status" method="POST">
-				<h2>发布近况</h2>
-				<textarea id="message" name="message"></textarea>
-				<p><input type="submit" value="发布" class="submit" data-role="button" data-inline="true"></p>
-			</form>
 		</div>
 	</div>
 	<div data-role="page" id="contacts">
@@ -85,6 +86,10 @@
 						$content.html(list.join(''));
 						$page.page();
 						$content.find( ":jqmData(role=listview)" ).listview();
+						$('.button').click(function(){
+							var temp,str=(temp=results[0].formatted_address).substring(0,temp.indexOf(' ')>0?temp.indexOf(' '):temp.length);
+							$('textarea').val(['我在:"',str,'"'].join(''));
+						})
 					}
 				})
 				

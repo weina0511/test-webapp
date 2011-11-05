@@ -50,10 +50,10 @@ public class TestController {
 	                                       + clientId + "&redirect_uri=" + redirectUri;  
 	            return "redirect:"+url;
 	        } else { 
-	        	if(accessToken==null){
+	        	//if(accessToken==null){
 	        		getaccessToken(code);
 	            // Step 2 - Exchange for access grant  		           
-	        	}
+	        	//}
 	            // Step 3 - Create connection 
 	          // ResponseEntity<String> ss =  restTemplate.getForEntity(apiBase+"/me?access_token="+accessToken, String.class);
 	           ResponseEntity<Feed> ss =  restTemplate.getForEntity(apiBase+"/me/home_newsfeed?user_detail=full&access_token="+accessToken, Feed.class);
